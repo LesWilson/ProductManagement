@@ -15,30 +15,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+package labs.pm.data;
 
-package labs.pm.app;
+public enum Rating {
+    NOT_RATED("\u2606\u2606\u2606\u2606\u2606"),
+    ONE_STAR("\u2605\u2606\u2606\u2606\u2606"),
+    TWO_STAR("\u2605\u2605\u2606\u2606\u2606"),
+    THREE_STAR("\u2605\u2605\u2605\u2606\u2606"),
+    FOUR_STAR("\u2605\u2605\u2605\u2605\u2606"),
+    FIVE_STAR("\u2605\u2605\u2605\u2605\u2605");
 
-import labs.pm.data.Product;
-
-import java.math.BigDecimal;
-
-/**
- * {@code Shop} class represents an application that manages Products
- * This is based on the Java 11 certification course on the Oracle University online platform.
- * @version 2.0
- * @author xyz
- */
-public class Shop {
+    private String stars;
 
     /**
-     *
-     * @param args the command line arguments
+     * Rating constructor
+     * NOTE: Course tells you to make this private, but private not required for Enums
      */
-    public static void main(String[] args) {
-        Product p1 = new Product();
-        p1.setId(101);
-        p1.setName("Tea");
-        p1.setPrice(BigDecimal.valueOf(1.99));
-        System.out.println(p1.getId() + " " + p1.getName() + " " + p1.getPrice() + " " + p1.getDiscount());
+    Rating(String stars) {
+        this.stars = stars;
+    }
+
+    public String getStars() {
+        return stars;
     }
 }

@@ -6,7 +6,7 @@
  * the Free Software Foundation, either version 3 of the license, or
  * (at your option) any later version.
  *
- * This program is distributed in teh hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -44,6 +44,7 @@ public class Product {
     private int id;
     private String name;
     private BigDecimal price;
+    private Rating rating;
 
     public int getId() {
         return id;
@@ -78,4 +79,9 @@ public class Product {
     public BigDecimal getDiscount() {
         return price.multiply(DISCOUNT_RATE).setScale(2, HALF_UP);
     }
+
+    public Rating getRating() {
+        return rating;
+    }
+
 }
