@@ -46,23 +46,18 @@ public abstract class Product {
     public static final BigDecimal DISCOUNT_RATE = BigDecimal.valueOf(0.1);
     /** The id of the product */
     private final int id;
+    /** The name of the product */
     private final String name;
+    /** The price of the product */
     private final BigDecimal price;
+    /** The rating of the product */
     private final Rating rating;
 
-    public Product(int id, String name, BigDecimal price, Rating rating) {
+    Product(int id, String name, BigDecimal price, Rating rating) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.rating = rating;
-    }
-
-    public Product(int id, String name, BigDecimal price) {
-        this(id, name, price, NOT_RATED);
-    }
-
-    public Product() {
-        this(0, "no name", BigDecimal.ZERO);
     }
 
     public int getId() {
