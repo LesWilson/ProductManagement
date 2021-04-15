@@ -32,6 +32,7 @@ public class Food extends Product {
      * Get the value of bestBefore date for the Food
      * @return the value of bestBefore
      */
+    @Override
     public LocalDate getBestBefore() {
         return bestBefore;
     }
@@ -42,6 +43,15 @@ public class Food extends Product {
     }
 
     @Override
+    public Product applyRating(Rating newRating) {
+        return new Food(getId(), getName(), getPrice(), newRating, bestBefore);
+    }
+
+    @Override
+    /*
+      This is no longer required as we added the bestBefore to the Product toString.
+      Training video does not remove it so you get bestBefore displayed twice
+     */
     public String toString() {
         return super.toString() + ", bestBefore=" + bestBefore;
     }

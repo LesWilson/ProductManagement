@@ -18,6 +18,7 @@
 package labs.pm.data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 
 import static java.math.RoundingMode.HALF_UP;
@@ -34,7 +35,7 @@ import static labs.pm.data.Rating.*;
  * @version 2.0
  * @author xyz
  */
-public class Product {
+public abstract class Product {
 
     /**
      * A constant that defines a
@@ -89,10 +90,16 @@ public class Product {
     public Rating getRating() {
         return rating;
     }
-
-    public Product applyRating(Rating newRating) {
-        return new Product(id, name, price, newRating);
+    /**
+     * Get the value of bestBefore date for the Product.
+     * The default is sub types dont override is today
+     * @return the value of bestBefore
+     */
+    public LocalDate getBestBefore() {
+        return LocalDate.now();
     }
+
+    public abstract Product applyRating(Rating newRating);
 
     @Override
     public String toString() {
@@ -100,7 +107,8 @@ public class Product {
                 ", name='" + name + "'" +
                 ", price=" + price +
                 ", discount=" + getDiscount() +
-                ", rating=" + rating.getStars();
+                ", rating=" + rating.getStars() +
+                ", bestBefore=" + getBestBefore();
     }
 
     @Override
