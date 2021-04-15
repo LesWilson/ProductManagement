@@ -1,13 +1,44 @@
+/*
+ * Copyright (C) 2020 Oracle
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the license, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in teh hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *
+ */
 package labs.pm.data;
 
 import java.math.BigDecimal;
 import static java.math.RoundingMode.HALF_UP;
 
 /**
- * Product class
+ * {@code Product} class represents properties and behaviours of
+ * product objects in the Product Management System.
+ * <br>
+ * Each product has an id, name and price
+ * <br>
+ * Each product can have a discount, calculated based on a
+ * {@link DISCOUNT_RATE discount rate}
+ * @version 2.0
+ * @author xyz
  */
 public class Product {
 
+    /**
+     * A constant that defines a
+     * {@link java.math.BigDecimal BigDecimal} value of the discount rate
+     * <br>
+     * Discount rate is 10%
+     */
     public static final BigDecimal DISCOUNT_RATE = BigDecimal.valueOf(0.1);
     /** The id of the product */
     private int id;
@@ -38,6 +69,12 @@ public class Product {
         this.price = price;
     }
 
+    /**
+     * Calculates discount based on a product price and
+     * {@link DISCOUNT_RATE discount rate}
+     * @return a {@link java.math.BigDecimal BigDecimal}
+     * value of the discount
+     */
     public BigDecimal getDiscount() {
         return price.multiply(DISCOUNT_RATE).setScale(2, HALF_UP);
     }
