@@ -22,7 +22,6 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 import static java.math.RoundingMode.HALF_UP;
-import static labs.pm.data.Rating.*;
 
 /**
  * {@code Product} class represents properties and behaviours of
@@ -35,7 +34,7 @@ import static labs.pm.data.Rating.*;
  * @version 2.0
  * @author xyz
  */
-public abstract class Product {
+public abstract class Product implements Rateable<Product> {
 
     /**
      * A constant that defines a
@@ -82,6 +81,7 @@ public abstract class Product {
         return price.multiply(DISCOUNT_RATE).setScale(2, HALF_UP);
     }
 
+    @Override
     public Rating getRating() {
         return rating;
     }
@@ -93,8 +93,6 @@ public abstract class Product {
     public LocalDate getBestBefore() {
         return LocalDate.now();
     }
-
-    public abstract Product applyRating(Rating newRating);
 
     @Override
     public String toString() {
