@@ -25,6 +25,7 @@ import labs.pm.data.ProductManager;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Locale;
 
 import static labs.pm.data.Rating.*;
 
@@ -41,7 +42,7 @@ public class Shop {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ProductManager pm = new ProductManager();
+        ProductManager pm = new ProductManager(Locale.UK);
         Product p1 = pm.createProduct(101, "Tea", BigDecimal.valueOf(1.99), THREE_STAR);
         Product p2 = pm.createProduct(102, "Coffee", BigDecimal.valueOf(1.99), FOUR_STAR);
         Product p3 = pm.createProduct(103, "Cake", BigDecimal.valueOf(3.99), TWO_STAR, LocalDate.now().plusDays(2));
