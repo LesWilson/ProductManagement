@@ -22,10 +22,7 @@ import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static java.time.format.FormatStyle.SHORT;
 
@@ -39,8 +36,7 @@ public class ProductManager {
     private DateTimeFormatter dateFormat;
     private NumberFormat moneyFormat;
 
-    private Product product;
-    private Review[] reviews = new Review[5];
+    private Map<Product, List<Review>> products = new HashMap<>();
 
     public ProductManager(Locale locale) {
         this.locale = locale;
@@ -50,34 +46,33 @@ public class ProductManager {
     }
 
     public Product createProduct(int id, String name, BigDecimal price, Rating rating, LocalDate bestBefore) {
-        product = new Food(id, name, price, rating, bestBefore);
+        Product product = new Food(id, name, price, rating, bestBefore);
+        products.putIfAbsent(product, new ArrayList<>());
         return product;
     }
 
     public Product createProduct(int id, String name, BigDecimal price, Rating rating) {
-        product = new Drink(id, name, price, rating);
+        Product product = new Drink(id, name, price, rating);
+        products.putIfAbsent(product, new ArrayList<>());
+        // comment
         return product;
     }
 
     public Product reviewProduct(Product product, Rating rating, String comments) {
-        if(reviews[reviews.length-1] != null) {
-            reviews = Arrays.copyOf(reviews, reviews.length + 5);
+        List<Review> reviews = products.get(product);
+        products.remove(product, reviews);
+        reviews.add(new Review(rating, comments));
+        int sum = 0;
+        for (Review review : reviews) {
+            sum += review.getRating().ordinal();
         }
-        int sum = 0, i = 0;
-        boolean reviewed = false;
-        while (i < reviews.length && !reviewed) {
-            if(reviews[i] == null) {
-                reviews[i] = new Review(rating, comments);
-                reviewed = true;
-            }
-            sum += reviews[i].getRating().ordinal();
-            i++;
-        }
-        this.product = product.applyRating(Rateable.convert(Math.round((float)sum / i)));
-        return this.product;
+        product = product.applyRating(Rateable.convert(Math.round((float)sum / reviews.size())));
+        products.put(product, reviews);
+        return product;
     }
 
-    public void printProductReport() {
+    public void printProductReport(Product product) {
+        List<Review> reviews = products.get(product);
         StringBuilder txt = new StringBuilder();
         txt.append(MessageFormat.format(resources.getString("product"),
                 product.getName(),
@@ -94,10 +89,21 @@ public class ProductManager {
                     review.getComments()));
             txt.append("\n");
         }
-        if(reviews[0] == null) {
+        if(reviews.isEmpty()) {
             txt.append(resources.getString("no.reviews"));
             txt.append("\n");
         }
         System.out.println(txt);
+    }
+
+    /**
+     * Example of using keySet to loop through products
+     */
+    public void printAllProducts() {
+        System.out.println("**** All Products start");
+        for(Product product : products.keySet()) {
+            printProductReport(product);
+        }
+        System.out.println("**** All Products end");
     }
 }
