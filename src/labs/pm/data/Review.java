@@ -21,7 +21,7 @@ package labs.pm.data;
  * @author leswilson
  * @version 2021-04-15 16:43
  */
-public class Review {
+public class Review implements Comparable <Review> {
     private Rating rating;
     private String comments;
 
@@ -44,5 +44,10 @@ public class Review {
                 "rating=" + rating +
                 ", comments='" + comments + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Review other) {
+        return other.rating.ordinal() - this.rating.ordinal();
     }
 }
