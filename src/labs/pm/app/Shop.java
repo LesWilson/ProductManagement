@@ -22,6 +22,7 @@ import labs.pm.data.Product;
 import labs.pm.data.ProductManager;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.Locale;
 
 import static labs.pm.data.Rating.*;
@@ -75,7 +76,17 @@ public class Shop {
         pm.reviewProduct(106, ONE_STAR, "I don't get it!");
         pm.printProductReport(106);
 
-        pm.printAllProducts();
+        Comparator<Product> ratingSorter = (p1, p2) -> p2.getRating().ordinal() - p1.getRating().ordinal();
+        pm.printProducts(ratingSorter);
+        Comparator<Product> priceSorter = (p1, p2) -> p2.getPrice().compareTo(p1.getPrice());
+
+        // Comparator.comparing can be used if the above sorter was written as
+        // (p1, p2) -> p1.getPrice().compareTo(p2.getPrice())
+        Comparator<Product> priceSorter2 = Comparator.comparing(Product::getPrice);
+        pm.printProducts(priceSorter2);
+
+        pm.printProducts(ratingSorter.thenComparing(priceSorter).reversed());
+
 
     }
 }

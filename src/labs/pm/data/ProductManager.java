@@ -117,9 +117,19 @@ public class ProductManager {
             txt.append(formatter.getText("no.reviews"));
             txt.append("\n");
         }
-        System.out.println(txt);
+//        System.out.println(txt);
     }
 
+    public void printProducts(Comparator<Product> sorter) {
+        List<Product> productList = new ArrayList<>(products.keySet());
+        productList.sort(sorter);
+        StringBuilder txt = new StringBuilder();
+        for(Product product : productList) {
+            txt.append(formatter.formatProduct(product));
+            txt.append("\n");
+        }
+        System.out.println(txt);
+    }
     /**
      * Example of using keySet to loop through products
      */
