@@ -53,6 +53,7 @@ public class Shop {
         pm.reviewProduct(102, THREE_STAR, "Coffee was ok");
         pm.reviewProduct(102, ONE_STAR, "Where is the milk?!");
         pm.reviewProduct(102, FIVE_STAR, "It's perfect with ten spoons of sugar!");
+        pm.changeLocale("fr-FR");
         pm.printProductReport(102);
         pm.createProduct(103, "Cake", BigDecimal.valueOf(3.99), NOT_RATED);
         pm.reviewProduct(103, FIVE_STAR, "Very nice cake");
