@@ -136,6 +136,17 @@ public class ProductManager {
                 .forEach(p -> txt.append(formatter.formatProduct(p) + "\n"));
         System.out.println(txt);
     }
+
+    public Map<String, String> getDiscounts() {
+        return products
+                .keySet()
+                .stream()
+                .collect(Collectors.groupingBy(p -> p.getRating().getStars(),
+                        Collectors.collectingAndThen(
+                                Collectors.summingDouble(p -> p.getDiscount().doubleValue()),
+                                discount -> formatter.moneyFormat.format(discount)
+                        )));
+    }
     /**
      * Example of using keySet to loop through products
      */

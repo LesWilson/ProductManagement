@@ -47,13 +47,4 @@ public final class Food extends Product {
         return new Food(getId(), getName(), getPrice(), newRating, bestBefore);
     }
 
-    @Override
-    /*
-      This is no longer required as we added the bestBefore to the Product toString.
-      Training video does not remove it so you get bestBefore displayed twice
-     */
-    public String toString() {
-        return super.toString() + ", bestBefore=" + bestBefore;
-    }
-
 }

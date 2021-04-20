@@ -101,7 +101,8 @@ public abstract class Product implements Rateable<Product> {
                 ", price=" + price +
                 ", discount=" + getDiscount() +
                 ", rating=" + rating.getStars() +
-                ", bestBefore=" + getBestBefore();
+                ", bestBefore=" + getBestBefore() +
+                ", discount=" + getDiscount();
     }
 
     @Override
