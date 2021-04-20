@@ -77,15 +77,15 @@ public class Shop {
         pm.printProductReport(106);
 
         Comparator<Product> ratingSorter = (p1, p2) -> p2.getRating().ordinal() - p1.getRating().ordinal();
-        pm.printProducts(ratingSorter);
+        pm.printProducts(p -> p.getPrice().doubleValue() < 3, ratingSorter);
         Comparator<Product> priceSorter = (p1, p2) -> p2.getPrice().compareTo(p1.getPrice());
 
         // Comparator.comparing can be used if the above sorter was written as
         // (p1, p2) -> p1.getPrice().compareTo(p2.getPrice())
         Comparator<Product> priceSorter2 = Comparator.comparing(Product::getPrice);
-        pm.printProducts(priceSorter2);
+        pm.printProducts(p -> p.getPrice().doubleValue() < 2, priceSorter2);
 
-        pm.printProducts(ratingSorter.thenComparing(priceSorter).reversed());
+        pm.printProducts(p -> p.getPrice().doubleValue() < 4, ratingSorter.thenComparing(priceSorter).reversed());
 
 
     }
