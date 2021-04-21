@@ -43,8 +43,8 @@ public class Shop {
     public static void main(String[] args) {
         ProductManager pm = new ProductManager(Locale.FRANCE);
         pm.createProduct(101, "Tea", BigDecimal.valueOf(1.99), NOT_RATED);
-        pm.printProductReport(101);
-        pm.reviewProduct(101, FOUR_STAR, "Nice hot cup of tea");
+//        pm.printProductReport(42);
+        pm.reviewProduct(200, FOUR_STAR, "Nice hot cup of tea");
         pm.reviewProduct(101, TWO_STAR, "Rather weak tea");
         pm.reviewProduct(101, FOUR_STAR, "Fine tea");
         pm.reviewProduct(101, FOUR_STAR, "Good tea");

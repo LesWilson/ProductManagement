@@ -100,7 +100,7 @@ public class ProductManager {
                 .stream()
                 .filter(p -> p.getId() == id)
                 .findFirst()
-                .orElse(null);
+                .get();
 //                .orElseGet(() -> null);
     }
 
@@ -109,10 +109,10 @@ public class ProductManager {
     }
     public void printProductReport(Product product) {
         List<Review> reviews = products.get(product);
+        Collections.sort(reviews);
         StringBuilder txt = new StringBuilder();
         txt.append(formatter.formatProduct(product));
         txt.append("\n");
-        Collections.sort(reviews);
         if(reviews.isEmpty()) {
             txt.append(formatter.getText("no.reviews") + "\n");
         } else {
