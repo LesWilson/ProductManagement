@@ -41,54 +41,61 @@ public class Shop {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ProductManager pm = new ProductManager(Locale.FRANCE);
+        ProductManager pm = new ProductManager(Locale.UK);
         pm.createProduct(101, "Tea", BigDecimal.valueOf(1.99), NOT_RATED);
         pm.printProductReport(101);
-        pm.reviewProduct(101, FOUR_STAR, "Nice hot cup of tea");
-        pm.reviewProduct(101, TWO_STAR, "Rather weak tea");
-        pm.reviewProduct(101, FOUR_STAR, "Fine tea");
-        pm.reviewProduct(101, FOUR_STAR, "Good tea");
-        pm.reviewProduct(101, FIVE_STAR, "Perfect tea");
-        pm.reviewProduct(101, THREE_STAR, "Just add some lemon");
+        pm.parseReview("101,4,Nice hot cup of tea");
+        // Invalid Product Id
+//        pm.parseReview("800,4,Nice hot cup of tea");
+        // Invalid number X
+//        pm.parseReview("101,X,Nice hot cup of tea");
+        // Invalid format for the text (only 2 pieces of data)
+//        pm.parseReview("1013,Nice hot cup of tea");
+
+//        pm.reviewProduct(101, FOUR_STAR, "Nice hot cup of tea");
+//        pm.reviewProduct(101, TWO_STAR, "Rather weak tea");
+//        pm.reviewProduct(101, FOUR_STAR, "Fine tea");
+//        pm.reviewProduct(101, FOUR_STAR, "Good tea");
+//        pm.reviewProduct(101, FIVE_STAR, "Perfect tea");
+//        pm.reviewProduct(101, THREE_STAR, "Just add some lemon");
         pm.printProductReport(101);
         pm.createProduct(102, "Coffee", BigDecimal.valueOf(1.99), NOT_RATED);
         pm.reviewProduct(102, THREE_STAR, "Coffee was ok");
         pm.reviewProduct(102, ONE_STAR, "Where is the milk?!");
         pm.reviewProduct(102, FIVE_STAR, "It's perfect with ten spoons of sugar!");
-        pm.changeLocale("en");
-        pm.printProductReport(102);
+//        pm.printProductReport(102);
         pm.createProduct(103, "Cake", BigDecimal.valueOf(3.99), NOT_RATED, LocalDate.now().plusDays(2));
         pm.reviewProduct(103, FIVE_STAR, "Very nice cake");
         pm.reviewProduct(103, FOUR_STAR, "It's good, but I've expected more chocolate?!");
         pm.reviewProduct(103, FIVE_STAR, "This cake is perfect!");
-        pm.printProductReport(103);
+//        pm.printProductReport(103);
         pm.createProduct(104, "Cookie", BigDecimal.valueOf(2.99), NOT_RATED, LocalDate.now());
         pm.reviewProduct(104, THREE_STAR, "Just another cookie");
         pm.reviewProduct(104, THREE_STAR, "Ok");
-        pm.printProductReport(104);
+//        pm.printProductReport(104);
         pm.createProduct(105, "Hot Chocolate", BigDecimal.valueOf(2.50), NOT_RATED);
         pm.reviewProduct(105, FOUR_STAR, "Tasty!");
         pm.reviewProduct(105, FOUR_STAR, "Not bad at all");
-        pm.printProductReport(105);
+//        pm.printProductReport(105);
         pm.createProduct(106, "Chocolate", BigDecimal.valueOf(2.50), NOT_RATED, LocalDate.now().plusDays(3));
         pm.reviewProduct(106, TWO_STAR, "Too sweet");
         pm.reviewProduct(106, THREE_STAR, "Better than cookie");
         pm.reviewProduct(106, TWO_STAR, "Too bitter");
         pm.reviewProduct(106, ONE_STAR, "I don't get it!");
-        pm.printProductReport(106);
+//        pm.printProductReport(106);
 
         Comparator<Product> ratingSorter = (p1, p2) -> p2.getRating().ordinal() - p1.getRating().ordinal();
-        pm.printProducts(p -> p.getPrice().doubleValue() < 3, ratingSorter);
+//        pm.printProducts(p -> p.getPrice().doubleValue() < 3, ratingSorter);
         Comparator<Product> priceSorter = (p1, p2) -> p2.getPrice().compareTo(p1.getPrice());
 
         // Comparator.comparing can be used if the above sorter was written as
         // (p1, p2) -> p1.getPrice().compareTo(p2.getPrice())
         Comparator<Product> priceSorter2 = Comparator.comparing(Product::getPrice);
-        pm.printProducts(p -> p.getPrice().doubleValue() < 2, priceSorter2);
+//        pm.printProducts(p -> p.getPrice().doubleValue() < 2, priceSorter2);
 
-        pm.printProducts(p -> p.getPrice().doubleValue() < 4, ratingSorter.thenComparing(priceSorter).reversed());
+//        pm.printProducts(p -> p.getPrice().doubleValue() < 4, ratingSorter.thenComparing(priceSorter).reversed());
 
-        pm.getDiscounts().forEach((rating, discount) -> System.out.println(rating+"\t"+discount));
+//        pm.getDiscounts().forEach((rating, discount) -> System.out.println(rating+"\t"+discount));
 
     }
 }
