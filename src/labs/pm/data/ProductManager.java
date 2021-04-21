@@ -24,6 +24,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static java.time.format.FormatStyle.SHORT;
@@ -33,6 +35,7 @@ import static java.time.format.FormatStyle.SHORT;
  */
 public class ProductManager {
 
+    private static final Logger logger = Logger.getLogger(ProductManager.class.getName());
     private ResourceFormatter formatter;
     private Map<Product, List<Review>> products = new HashMap<>();
     private static Map<String, ResourceFormatter> formatters =
@@ -72,7 +75,12 @@ public class ProductManager {
     }
 
     public Product reviewProduct(int id, Rating rating, String comments) {
-        return reviewProduct(findProduct(id), rating, comments);
+        try {
+            return reviewProduct(findProduct(id), rating, comments);
+        } catch (ProductManagerException e) {
+            logger.log(Level.INFO, e.getMessage());
+        }
+        return null;
     }
 
     public Product reviewProduct(Product product, Rating rating, String comments) {
@@ -94,18 +102,21 @@ public class ProductManager {
         return product;
     }
 
-    public Product findProduct(int id) {
+    public Product findProduct(int id) throws ProductManagerException{
         return products
                 .keySet()
                 .stream()
                 .filter(p -> p.getId() == id)
                 .findFirst()
-                .get();
-//                .orElseGet(() -> null);
+                .orElseThrow(() -> new ProductManagerException("Product with id " + id + " not found"));
     }
 
     public void printProductReport(int id) {
-        printProductReport(findProduct(id));
+        try {
+            printProductReport(findProduct(id));
+        } catch (ProductManagerException e) {
+            logger.log(Level.INFO, e.getMessage());
+        }
     }
     public void printProductReport(Product product) {
         List<Review> reviews = products.get(product);
