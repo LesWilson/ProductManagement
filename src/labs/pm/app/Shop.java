@@ -21,13 +21,10 @@ package labs.pm.app;
 import labs.pm.data.Product;
 import labs.pm.data.ProductManager;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Locale;
-
-import static labs.pm.data.Rating.*;
 
 /**
  * {@code Shop} class represents an application that manages Products
