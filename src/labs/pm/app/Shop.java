@@ -41,9 +41,6 @@ public class Shop {
     public static void main(String[] args) {
         ProductManager pm = new ProductManager(Locale.UK);
         pm.parseProduct("D,101,Tea,1.99,0,2021-04-21");
-        // Invalid string, not enough values
-//        pm.parseProduct("D,109,Tea,1.99,0");
-        pm.printProductReport(101);
         pm.parseReview("101,4,Nice hot cup of tea");
         pm.parseReview("101,2,Rather weak tea");
         pm.parseReview("101,4,Fine tea");
@@ -57,8 +54,6 @@ public class Shop {
         pm.parseReview("102,1,Where is the milk?!");
         pm.parseReview("102,5,It's perfect with ten spoons of sugar!");
         pm.printProductReport(102);
-        // Invalid date
-//        pm.parseProduct("F,103,Cake,3.99,0,2021-04-46");
         pm.parseProduct("F,103,Cake,3.99,0,"+LocalDate.now().format(DateTimeFormatter.ISO_DATE));
 
         pm.parseReview("103,5,Very nice cake");
@@ -80,18 +75,23 @@ public class Shop {
         pm.parseReview("106,1,I don't get it!");
         pm.printProductReport(106);
 
-        Comparator<Product> ratingSorter = (p1, p2) -> p2.getRating().ordinal() - p1.getRating().ordinal();
-        pm.printProducts(p -> p.getPrice().doubleValue() < 3, ratingSorter);
-        Comparator<Product> priceSorter = (p1, p2) -> p2.getPrice().compareTo(p1.getPrice());
+        // Invalid string, not enough values
+//        pm.parseProduct("D,109,Tea,1.99,0");
+        // Invalid date
+//        pm.parseProduct("F,103,Cake,3.99,0,2021-04-46");
 
-        // Comparator.comparing can be used if the above sorter was written as
-        // (p1, p2) -> p1.getPrice().compareTo(p2.getPrice())
-        Comparator<Product> priceSorter2 = Comparator.comparing(Product::getPrice);
-        pm.printProducts(p -> p.getPrice().doubleValue() < 2, priceSorter2);
-
-        pm.printProducts(p -> p.getPrice().doubleValue() < 4, ratingSorter.thenComparing(priceSorter).reversed());
-
-        pm.getDiscounts().forEach((rating, discount) -> System.out.println(rating+"\t"+discount));
+//        Comparator<Product> ratingSorter = (p1, p2) -> p2.getRating().ordinal() - p1.getRating().ordinal();
+//        pm.printProducts(p -> p.getPrice().doubleValue() < 3, ratingSorter);
+//        Comparator<Product> priceSorter = (p1, p2) -> p2.getPrice().compareTo(p1.getPrice());
+//
+//        // Comparator.comparing can be used if the above sorter was written as
+//        // (p1, p2) -> p1.getPrice().compareTo(p2.getPrice())
+//        Comparator<Product> priceSorter2 = Comparator.comparing(Product::getPrice);
+//        pm.printProducts(p -> p.getPrice().doubleValue() < 2, priceSorter2);
+//
+//        pm.printProducts(p -> p.getPrice().doubleValue() < 4, ratingSorter.thenComparing(priceSorter).reversed());
+//
+//        pm.getDiscounts().forEach((rating, discount) -> System.out.println(rating+"\t"+discount));
 
     }
 }
