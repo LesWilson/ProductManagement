@@ -69,6 +69,7 @@ public class ProductManager {
 
     public ProductManager(String languageTag) {
         changeLocale(languageTag);
+        loadAllData();
     }
 
     public void changeLocale(String languageTag) {
@@ -166,8 +167,22 @@ public class ProductManager {
                 .stream()
                 .sorted(sorter)
                 .filter(filter)
-                .forEach(p -> txt.append(formatter.formatProduct(p) + "\n"));
+                .forEach(p -> txt.append(formatter.formatProduct(p)).append("\n"));
         System.out.println(txt);
+    }
+
+    private void loadAllData() {
+        try {
+            products = Files.list(dataFolder)
+                    .filter(f -> f.getFileName().toString().startsWith("product"))
+                    .map(this::loadProduct)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toMap(product -> product,
+                            this::loadReviews));
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Could not load products " + e.getMessage(), e);
+        }
+
     }
 
     private Product loadProduct(Path file) {
@@ -175,20 +190,20 @@ public class ProductManager {
         try {
             product = parseProduct(
                     Files.lines(dataFolder.resolve(file), StandardCharsets.UTF_8)
-                            .findFirst().orElseThrow();
-        } catch (IOException e) {
+                            .findFirst().orElseThrow());
+        } catch (IOException | NoSuchElementException e) {
             logger.log(Level.WARNING, "Could not load product " + e.getMessage());
         }
         return product;
     }
     private List<Review> loadReviews(Product product) {
         List<Review> reviews = new ArrayList<>();
-        Path file = reportsFolder.resolve(MessageFormat.format(config.getString("reviews.data.file"), product.getId()));
+        Path file = dataFolder.resolve(MessageFormat.format(config.getString("reviews.data.file"), product.getId()));
         if (Files.exists(file)) {
             try {
-                reviews = Files.lines(file, Charset.forName("UTF-8"))
-                        .map(text -> parseReview(text))
-                        .filter(review -> review != null)
+                reviews = Files.lines(file, StandardCharsets.UTF_8)
+                        .map(this::parseReview)
+                        .filter(Objects::nonNull)
                         .collect(Collectors.toList());
             } catch (IOException e) {
                 logger.log(Level.WARNING, "Error loading reviews " + e.getMessage(), e);
@@ -196,7 +211,8 @@ public class ProductManager {
         }
         return reviews;
     }
-    public Review parseReview(String text) {
+
+    private Review parseReview(String text) {
         Review review = null;
         try {
             Object[] values = reviewFormat.parse(text);
@@ -209,7 +225,7 @@ public class ProductManager {
         return review;
     }
 
-    public Product parseProduct(String text) {
+    private Product parseProduct(String text) {
         Product product = null;
         try {
             Object[] values = productFormat.parse(text);
