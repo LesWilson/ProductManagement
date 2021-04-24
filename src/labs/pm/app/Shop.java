@@ -60,6 +60,8 @@ public class Shop {
 
         Comparator<Product> ratingSorter = (p1, p2) -> p2.getRating().ordinal() - p1.getRating().ordinal();
         pm.printProducts(p -> p.getPrice().doubleValue() < 3, ratingSorter);
+        pm.printProducts(p -> p.getPrice().doubleValue() < 3, ratingSorter);
+
         Comparator<Product> priceSorter = (p1, p2) -> p2.getPrice().compareTo(p1.getPrice());
 
         // Comparator.comparing can be used if the above sorter was written as
@@ -68,6 +70,16 @@ public class Shop {
         pm.printProducts(p -> p.getPrice().doubleValue() < 2, priceSorter2);
 
         pm.printProducts(p -> p.getPrice().doubleValue() < 4, ratingSorter.thenComparing(priceSorter).reversed());
+
+        // Print out how many products we have now
+        pm.productCount();
+        pm.dumpData();
+        // Print out how many products we have now
+        pm.productCount();
+
+        pm.restoreData();
+        // Print out how many products we have now
+        pm.productCount();
 
         pm.getDiscounts().forEach((rating, discount) -> System.out.println(rating+"\t"+discount));
 

@@ -17,11 +17,8 @@
  */
 package labs.pm.data;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.math.BigDecimal;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,6 +27,7 @@ import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.time.DateTimeException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -160,15 +158,58 @@ public class ProductManager {
     }
 
     public void printProducts(Predicate<Product> filter, Comparator<Product> sorter) {
+        logger.info("Printing Products - Start");
         List<Product> productList = new ArrayList<>(products.keySet());
         productList.sort(sorter);
-        StringBuilder txt = new StringBuilder();
+        StringBuilder txt = new StringBuilder("Product Info:\n");
         products.keySet()
                 .stream()
                 .sorted(sorter)
                 .filter(filter)
                 .forEach(p -> txt.append(formatter.formatProduct(p)).append("\n"));
-        System.out.println(txt);
+        logger.info(txt.toString());
+        logger.info("Printing Products - End");
+    }
+
+    // Should make dump and restore private - but leaving to enable testing
+    public void dumpData() {
+        logger.info("Dumping Data - Start");
+        try {
+            if (Files.notExists(tempFolder)) {
+                Files.createDirectory(tempFolder);
+            }
+            Path tempFile = tempFolder.resolve(
+                    MessageFormat.format(config.getString("temp.file"), Instant.now())
+            );
+
+            try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(tempFile, StandardOpenOption.CREATE))) {
+                out.writeObject(products);
+                products = new HashMap<>();
+            }
+            logger.info("Dumping Data - Complete");
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Could not dump products " + e.getMessage(), e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void restoreData() {
+        logger.info("Restoring Data - Start");
+        try {
+            if (Files.notExists(tempFolder)) {
+                Files.createDirectory(tempFolder);
+            }
+            Path tempFile = Files.list(tempFolder)
+                    .filter(path -> path.getFileName().toString().endsWith(".tmp"))
+                    .findFirst().orElseThrow();
+
+            try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(tempFile, StandardOpenOption.DELETE_ON_CLOSE))) {
+                products = (HashMap)in.readObject();
+            }
+            logger.info("Restoring Data - Complete");
+        } catch (IOException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Could not restore products " + e.getMessage(), e);
+        }
     }
 
     private void loadAllData() {
@@ -196,6 +237,7 @@ public class ProductManager {
         }
         return product;
     }
+
     private List<Review> loadReviews(Product product) {
         List<Review> reviews = new ArrayList<>();
         Path file = dataFolder.resolve(MessageFormat.format(config.getString("reviews.data.file"), product.getId()));
@@ -258,6 +300,10 @@ public class ProductManager {
                                 Collectors.summingDouble(p -> p.getDiscount().doubleValue()),
                                 discount -> formatter.moneyFormat.format(discount)
                         )));
+    }
+
+    public void productCount() {
+        logger.info(products.size() + " products loaded");
     }
     /**
      * Example of using keySet to loop through products
